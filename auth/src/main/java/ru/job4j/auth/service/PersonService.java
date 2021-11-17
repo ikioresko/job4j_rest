@@ -24,12 +24,13 @@ public class PersonService {
     }
 
     public Person save(Person person) {
-        System.out.println("is isave");
         return store.save(person);
 
     }
 
-    public void delete(Person person) {
+    public void deleteById(int id) {
+        Person person = new Person();
+        person.setId(id);
         store.delete(person);
     }
 }
