@@ -23,6 +23,10 @@ public class PersonService {
         return store.findById(id);
     }
 
+    public Person findByName(String name) {
+        return store.findPersonByName(name);
+    }
+
     public Person save(Person person) {
         return store.save(person);
 
