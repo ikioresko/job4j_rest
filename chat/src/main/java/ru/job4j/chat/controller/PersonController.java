@@ -1,9 +1,11 @@
 package ru.job4j.chat.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Person;
 import ru.job4j.chat.service.PersonService;
 
@@ -24,7 +26,9 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public Person findRoomById(@PathVariable int id) {
-        return person.findById(id).orElse(new Person());
+    public Person findPersonById(@PathVariable int id) {
+        return person.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Person is not found."
+        ));
     }
 }

@@ -1,9 +1,8 @@
 package ru.job4j.chat.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.service.RoomService;
 
@@ -12,19 +11,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/room")
 public class RoomController {
-    private final RoomService room;
+    private final RoomService rooms;
 
     public RoomController(RoomService room) {
-        this.room = room;
+        this.rooms = room;
+    }
+
+    @PostMapping("/")
+    public Room create(@RequestBody Room room) {
+        System.out.println(room);
+        if (room.getName() == null) {
+            throw new NullPointerException("Room name can't be empty");
+        }
+        return this.rooms.save(room);
     }
 
     @GetMapping("/")
     public List<Room> findAll() {
-        return room.findAll();
+        return rooms.findAll();
     }
 
     @GetMapping("/{id}")
     public Room findRoomById(@PathVariable int id) {
-        return room.findById(id).orElse(new Room());
+        return rooms.findById(id).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Room is not found."));
     }
 }
