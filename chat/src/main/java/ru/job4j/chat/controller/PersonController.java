@@ -7,6 +7,7 @@ import ru.job4j.chat.model.Person;
 import ru.job4j.chat.model.PersonDTO;
 import ru.job4j.chat.service.PersonService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class PersonController {
     }
 
     @PatchMapping("/")
-    public Person update(@RequestBody PersonDTO dto) {
+    public Person update(@Valid @RequestBody PersonDTO dto) {
         return person.update(findPersonById(dto.getId()), dto);
     }
 }

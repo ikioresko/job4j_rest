@@ -1,6 +1,7 @@
 package ru.job4j.chat.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -8,7 +9,9 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Username must be not empty")
     private String username;
+    @NotBlank(message = "Password must be not empty")
     private String password;
     @ManyToOne(cascade = CascadeType.MERGE)
     private Role role;

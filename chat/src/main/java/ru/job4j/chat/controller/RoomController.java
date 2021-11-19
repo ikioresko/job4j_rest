@@ -10,6 +10,7 @@ import ru.job4j.chat.model.Room;
 import ru.job4j.chat.model.RoomDTO;
 import ru.job4j.chat.service.RoomService;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -22,12 +23,11 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public Room create(@RequestBody Room room) {
-        System.out.println(room);
+    public ResponseEntity<?> create(@Valid @RequestBody Room room) {
         if (room.getName() == null) {
             throw new NullPointerException("Room name can't be empty");
         }
-        return this.rooms.save(room);
+        return ResponseEntity.of(Optional.of(this.rooms.save(room)));
     }
 
     @GetMapping("/{id}")
@@ -53,7 +53,7 @@ public class RoomController {
     }
 
     @PatchMapping("/")
-    public ResponseEntity<?> update(@RequestBody RoomDTO dto) {
+    public ResponseEntity<?> update(@Valid @RequestBody RoomDTO dto) {
         var currentRoom = rooms.findById(dto.getId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room is not found."));
         return ResponseEntity.of(Optional.of(rooms.update(currentRoom, dto)));

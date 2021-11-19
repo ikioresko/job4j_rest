@@ -7,6 +7,7 @@ import ru.job4j.chat.model.Message;
 import ru.job4j.chat.model.MessageDTO;
 import ru.job4j.chat.service.MessageService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public Message create(@RequestBody Message message) {
+    public Message create(@Valid @RequestBody Message message) {
         if (message.getText() == null) {
             throw new NullPointerException("Message can't be empty");
         }
@@ -39,7 +40,7 @@ public class MessageController {
     }
 
     @PatchMapping("/")
-    public Message update(@RequestBody MessageDTO dto) {
+    public Message update(@Valid @RequestBody MessageDTO dto) {
         var currentMessage = findMessageById(dto.getId());
         return messages.update(currentMessage, dto);
     }

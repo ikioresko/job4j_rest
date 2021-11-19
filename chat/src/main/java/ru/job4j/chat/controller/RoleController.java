@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.service.RoleService;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -16,6 +17,14 @@ public class RoleController {
 
     public RoleController(RoleService role) {
         this.roleService = role;
+    }
+
+    @PostMapping("/")
+    public Role create(@Valid @RequestBody Role role) {
+        if (role.getName() == null) {
+            throw new NullPointerException("Room name can't be empty");
+        }
+        return roleService.save(role);
     }
 
     @GetMapping("/")
@@ -31,7 +40,7 @@ public class RoleController {
     }
 
     @PatchMapping("/")
-    public Role update(@RequestBody Role role)
+    public Role update(@Valid  @RequestBody Role role)
             throws InvocationTargetException, IllegalAccessException {
         return roleService.update(role, findRoleById(role.getId()));
     }
