@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Message;
+import ru.job4j.chat.model.MessageDTO;
 import ru.job4j.chat.service.MessageService;
 
 import java.util.List;
@@ -35,5 +36,11 @@ public class MessageController {
             throw new NullPointerException("Message can't be empty");
         }
         return messages.save(message);
+    }
+
+    @PatchMapping("/")
+    public Message update(@RequestBody MessageDTO dto) {
+        var currentMessage = findMessageById(dto.getId());
+        return messages.update(currentMessage, dto);
     }
 }

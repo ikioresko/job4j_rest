@@ -7,6 +7,7 @@ import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Room;
+import ru.job4j.chat.model.RoomDTO;
 import ru.job4j.chat.service.RoomService;
 
 import java.util.*;
@@ -44,11 +45,17 @@ public class RoomController {
                 add(r);
             }
         }};
-        var entity = new ResponseEntity(
+        return new ResponseEntity(
                 body,
                 new MultiValueMapAdapter<>(Map.of("Job4jCustomHeader", List.of("job4j"))),
                 HttpStatus.OK
         );
-        return entity;
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<?> update(@RequestBody RoomDTO dto) {
+        var currentRoom = rooms.findById(dto.getId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room is not found."));
+        return ResponseEntity.of(Optional.of(rooms.update(currentRoom, dto)));
     }
 }

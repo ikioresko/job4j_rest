@@ -1,33 +1,38 @@
 package ru.job4j.chat.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.service.RoleService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
 @RestController
 @RequestMapping("/role")
 public class RoleController {
-    private final RoleService role;
+    private final RoleService roleService;
 
     public RoleController(RoleService role) {
-        this.role = role;
+        this.roleService = role;
     }
 
     @GetMapping("/")
     public List<Role> findAll() {
-        return role.findAll();
+        return roleService.findAll();
     }
 
     @GetMapping("/{id}")
     public Role findRoleById(@PathVariable int id) {
-        return role.findById(id).orElseThrow(() -> new ResponseStatusException(
+        return roleService.findById(id).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Role is not found."
         ));
+    }
+
+    @PatchMapping("/")
+    public Role update(@RequestBody Role role)
+            throws InvocationTargetException, IllegalAccessException {
+        return roleService.update(role, findRoleById(role.getId()));
     }
 }

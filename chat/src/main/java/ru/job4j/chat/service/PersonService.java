@@ -2,6 +2,7 @@ package ru.job4j.chat.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.chat.model.Person;
+import ru.job4j.chat.model.PersonDTO;
 import ru.job4j.chat.repository.PersonRepo;
 
 import java.util.List;
@@ -36,5 +37,15 @@ public class PersonService {
         Person person = new Person();
         person.setId(id);
         store.delete(person);
+    }
+
+    public Person update(Person currentPerson, PersonDTO dto) {
+        var role = currentPerson.getRole();
+        var person = new Person();
+        person.setId(dto.getId());
+        person.setUsername(dto.getUsername());
+        person.setPassword(dto.getPassword());
+        person.setRole(role);
+        return store.save(person);
     }
 }

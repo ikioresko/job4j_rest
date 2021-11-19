@@ -2,6 +2,7 @@ package ru.job4j.chat.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.chat.model.Message;
+import ru.job4j.chat.model.MessageDTO;
 import ru.job4j.chat.repository.MessageRepo;
 
 import java.util.List;
@@ -25,7 +26,15 @@ public class MessageService {
 
     public Message save(Message message) {
         return store.save(message);
+    }
 
+    public Message update(Message currentMessage, MessageDTO newMessage) {
+        var author = currentMessage.getAuthor();
+        var message = new Message();
+        message.setAuthor(author);
+        message.setText(newMessage.getText());
+        message.setId(newMessage.getId());
+        return store.save(message);
     }
 
     public void deleteById(int id) {
