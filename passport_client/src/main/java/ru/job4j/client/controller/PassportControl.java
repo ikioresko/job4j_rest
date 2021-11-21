@@ -54,4 +54,9 @@ public class PassportControl {
     public List<Passport> findReplaceable() {
         return store.findReplaceable();
     }
+
+    @GetMapping("/get")
+    public List<Passport> work() {
+        return store.findReplaceable();
+    }
 }

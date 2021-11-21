@@ -1,10 +1,11 @@
 package ru.job4j.client;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.client.RestTemplate;
-import ru.job4j.client.repository.PassportClientStore;
 
 @SpringBootApplication
 public class PassportClientApplication {
@@ -15,6 +16,11 @@ public class PassportClientApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PassportClientApplication.class, args);
+    }
+
+    @KafkaListener(topics = {"passport-exp"})
+    public void listenStatistic(ConsumerRecord<Integer, String> input) {
+        System.out.printf("\n%s%n", input.value());
     }
 
 }
